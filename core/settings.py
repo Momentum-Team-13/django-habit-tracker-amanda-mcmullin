@@ -12,32 +12,31 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import environ
-import os
+import django_on_heroku
 
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# For django-environ
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
 
+environ.Env.read_env()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# # Take environment variables from .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-$inqew4ge0&)$4y$na$v&j7&h!smj@p%*tzkl*_)*y7k^lue_='
-SECRET_KEY  = env('SECRET_KEY')
+# SECRET_KEY  = 'django-insecure-$inqew4ge0&)$4y$na$v&j7&h!smj@p%*tzkl*_)*y7k^lue_='
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -57,10 +56,6 @@ INSTALLED_APPS = [
     'habits',
 ]
 
-ACCOUNT_ACTIVATION_DAYS = 7
-LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "auth_login"
-REGISTRATION_AUTO_LOGIN = True
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -78,7 +73,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -98,10 +93,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db()
 }
 
 # DATABASES = {
@@ -117,8 +109,7 @@ DATABASES = {
 #         default='sqlite:////tmp/my-tmp-sqlite.db'
 #     )
 # }
-# Line below will go in .env file?????
-# #DATABASE_URL=postgres://habit-tracker:@127.0.0.1:5432/habit-tracker
+
 
 
 
@@ -157,7 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -170,17 +161,11 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "auth_login"
 
-# CACHES = {
-#     # Read os.environ['CACHE_URL'] and raises
-#     # ImproperlyConfigured exception if not found.
-#     #
-#     # The cache() method is an alias for cache_url().
-#     'default': env.cache(),
 
-#     # read os.environ['REDIS_URL']
-#     'redis': env.cache_url('REDIS_URL')
-# }
-#******DO THE LINES BELOW GO IN THE .ENV FILE?????*******
-# CACHE_URL=memcache://127.0.0.1:11211,127.0.0.1:11212,127.0.0.1:11213
-# REDIS_URL=rediscache://127.0.0.1:6379/1?client_class=django_redis.client.DefaultClient&password=ungithubbed-secret
+django_on_heroku.settings(locals())
+del DATABASES['default']['OPTIONS']['sslmode']
+

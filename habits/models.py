@@ -1,37 +1,36 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 import datetime
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
+    pass
+    # user_name = models.CharField(max_length=100, null=True, blank=True)
+    # email = models.CharField(max_length=100, null=True, blank=True)
 
+    # def __str__(self):
+    #     return f"User Name : {self.user_name} | Email: {self.email}" 
     def __str__(self):
         return self.username
 
 
-class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profiles")
-    first_name = models.CharField(max_length=55)
-    last_name = models.CharField(max_length=55)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}" 
-
-
 class Habit(models.Model):
-    title = models.CharField(max_length=150)
-    description = models.CharField(max_length=255)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="habits")
+    name = models.CharField(max_length=150)
+    description = models.TextField
     goal = models.IntegerField(default=0)
-    creator = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="habits")
+    unit = models.CharField(max_length=55)
 
     def __str__(self):
-        return f"Title: {self.title} / Description: {self.description} / Goal: {self.goal}"
+        return f"Name: {self.name} | Description: {self.description} | Goal: {self.goal} | Unit: {self.unit}"
 
 
 class HabitTracker(models.Model):
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name="habit_trackers")
     date = models.DateField(default=datetime.date.today)
-    tracking_unit = models.IntegerField(default=0)
+    tracking_goal = models.IntegerField(default=0)
+    note = models.TextField
 
     def __str__(self):
-        return f"Date: {self.date} / Amount Completed: {self.tracking_unit}"
+        return f"Date: {self.date} | Amount Completed: {self.tracking_goal} | Note: {self.note}"
+
