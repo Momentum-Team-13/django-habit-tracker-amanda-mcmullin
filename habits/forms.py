@@ -26,6 +26,5 @@ class HabitTrackerForm(forms.ModelForm):
         model = HabitTracker
         fields = [
             'habit',
-            'date',
             'goal_quantity',
         ]

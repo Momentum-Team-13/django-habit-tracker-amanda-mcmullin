@@ -23,6 +23,7 @@ urlpatterns = [
     # for django-registration-redux
     path('auth/', include('registration.backends.simple.urls')),
     path('admin/', admin.site.urls),
+    path('habits/<int:pk>/edit/', habits_views.edit_habit, name='edit_habit'),
 ]
 
 
