@@ -1,36 +1,44 @@
 from django.db import models
-import datetime
 from django.contrib.auth.models import AbstractUser
+from django.db.models.constraints import UniqueConstraint
+import datetime
 
 # Create your models here.
-class User(AbstractUser):
-    pass
-    # user_name = models.CharField(max_length=100, null=True, blank=True)
-    # email = models.CharField(max_length=100, null=True, blank=True)
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self):
-    #     return f"User Name : {self.user_name} | Email: {self.email}" 
+    class Meta:
+        abstract = True
+
+
+class User(AbstractUser):
     def __str__(self):
         return self.username
 
 
-class Habit(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="habits")
-    name = models.CharField(max_length=150)
-    description = models.TextField
-    goal = models.IntegerField(default=0)
+class Habit(BaseModel):
+    creator = models.ForeignKey("User", on_delete=models.CASCADE, related_name="habits")
+    habit_name = models.CharField(max_length=150)
+    goal = models.PositiveIntegerField(default=0)
     unit = models.CharField(max_length=55)
 
     def __str__(self):
-        return f"Name: {self.name} | Description: {self.description} | Goal: {self.goal} | Unit: {self.unit}"
+        return f"Name: {self.habit_name} | Goal: {self.goal} | Unit: {self.unit}"
 
 
-class HabitTracker(models.Model):
-    habit = models.ForeignKey(Habit, on_delete=models.CASCADE, related_name="habit_trackers")
+class HabitTracker(BaseModel):
+    habit = models.ForeignKey("Habit", on_delete=models.CASCADE, related_name="habit_trackers")
     date = models.DateField(default=datetime.date.today)
-    tracking_goal = models.IntegerField(default=0)
-    note = models.TextField
+    goal_quantity = models.PositiveIntegerField(default=0)
+    note = models.TextField(null=True, blank=True)
+    note_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['habit', 'date'], name='unique_habit_date')
+        ]
 
     def __str__(self):
-        return f"Date: {self.date} | Amount Completed: {self.tracking_goal} | Note: {self.note}"
+        return f"Date: {self.date} | Amount Completed: {self.goal_quantity} | Note: {self.note}"
 
