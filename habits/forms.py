@@ -1,5 +1,14 @@
 from django import forms
-from .models import BaseModel, Habit, HabitTracker
+from .models import User, Habit, HabitTracker
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'user_name',
+            'email',
+        ]
+
 
 class HabitForm(forms.ModelForm):
     class Meta:
@@ -17,6 +26,6 @@ class HabitTrackerForm(forms.ModelForm):
         model = HabitTracker
         fields = [
             'habit',
+            'date',
             'goal_quantity',
-            'note',
         ]

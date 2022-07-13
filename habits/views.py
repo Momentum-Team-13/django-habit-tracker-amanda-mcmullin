@@ -5,4 +5,4 @@ from .forms import HabitForm, HabitTrackerForm
 # Create your views here.
 def home(request):
     habits = Habit.objects.all()
-    return render(request, "Habits/list_habits.html", {'habits': habits})
+    return render(request, "habits/home.html")

@@ -16,19 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
-from habits import views as habits_view
+from habits import views as habits_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('__debug__/', include('debug_toolbar.urls')),
+    path('', habits_views.home, name="home"),
+    # for django-registration-redux
     path('auth/', include('registration.backends.simple.urls')),
-    path('', habits_view.home, name="home")
+    path('admin/', admin.site.urls),
 ]
 
 
 #debug toolbar
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns = [
+    urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    ]
