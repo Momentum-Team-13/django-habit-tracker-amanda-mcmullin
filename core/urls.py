@@ -21,9 +21,12 @@ from habits import views as habits_views
 urlpatterns = [
     path('', habits_views.home, name="home"),
     # for django-registration-redux
-    path('auth/', include('registration.backends.simple.urls')),
+    path('accounts/', include('registration.backends.simple.urls')), 
     path('admin/', admin.site.urls),
+    path('habits/', habits_views.habit_list, name='habit_list'),
+    path('habits/add/', habits_views.add_habit, name='add_habit'),
     path('habits/<int:pk>/edit/', habits_views.edit_habit, name='edit_habit'),
+    path('habits/<int:pk>/delete', habits_views.delete_habit, name='delete_habit')
 ]
 
 

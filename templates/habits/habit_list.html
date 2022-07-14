@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Habit List for {{ user.username }}</h1>
+
+<div>
+    {% for habit in habits %}
+    <div>
+        <div>{{ habit.habit_name }}</div>
+    </div>
+    
+    {% endfor %}
+</div>
+    <p>
+        <a href="{% url 'edit_habit' pk=user.pk %}">Edit Habit</a><br>
+        <a href="{% url 'delete_habit' pk=user.pk %}">Delete Habit</a>
+    </p>
+{% endblock %}

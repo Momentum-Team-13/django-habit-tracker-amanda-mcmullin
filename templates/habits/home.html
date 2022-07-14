@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
 {% block content%}
-<h1>Habit Tracker</h1>
+<h1>Welcome to Habit Tracker!</h1>
 
-<!-- <div>
-    {% for habit in habits %}
-        <div>
-            <h3>{{ habit.habit_name }}</h3>
-            <h3>{{ habit.goal }} {{ habit.unit}}</h3>
-        </div>
-    {% endfor %}
-</div> -->
+<div>
+    <p> <a href="{% url 'registration_register' %}">Create a free account</a></p>
+
+    <p> <a href="{% url 'auth_login' %}">Log in</a></p>
+
+</div>
 {% endblock %}
