@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h2>Delete Habit</h2>
 
 <div>
-    <form action="{% url 'delete_habit' pk=user.pk %}" method='POST'>
+    <form action="{% url 'delete_habit' pk=habit.pk %}" method='POST'>
         {% csrf_token %}
         <p>Habits are powerful tools for self improvement!</p>
-        <p>Are you sure you want to delete {{ habit.habit_name }}</p>
+        <p>Are you sure you want to delete {{ habit.habit_name }}?</p>
         <div>
             <button type="submit">Delete Habit</button><br>
             <br>
-            <a href="{% url 'habit_list' %}">Take Me Back To My Habits List!</a>
+            <a href="{% url 'habits_list' %}">Take Me Back To My Habits List!</a>
         </div>
     </form>
 </div>
+
 {% endblock %}

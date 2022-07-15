@@ -14,7 +14,6 @@ class HabitForm(forms.ModelForm):
     class Meta:
         model = Habit
         fields = [
-            'creator',
             'habit_name',
             'goal',
             'unit',

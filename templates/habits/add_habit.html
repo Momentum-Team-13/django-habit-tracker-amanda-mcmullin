@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h2>Add a New Habit</h2>
 
 <div class="form">
@@ -8,11 +9,12 @@
         {% csrf_token %}
         {% for field in form %}
         <div>
-            <label for="{{field.id_for_label}}" >{{field.label}}</label>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
         </div>
         {% endfor %}
-        <div class="submit">
+
+        <div>
             <button type="submit">Save</button>
         </div>
     </form>
