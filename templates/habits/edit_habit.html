@@ -1,11 +1,11 @@
-{% extends base.html %}
+{% extends 'base.html' %}
 
 {% block content %}
 
 <h2>Edit Habit</h2>
 
 <div>
-    <form action="{% url 'edit_habit' pk=habit.pk %}" method="POST">
+    <form action="{% url 'edit_habit' pk=habit.pk%}" method="POST">
         {% csrf_token %}
         {{ forms.as_p }}
 

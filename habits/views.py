@@ -1,3 +1,4 @@
+from http.client import REQUEST_ENTITY_TOO_LARGE
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -14,58 +15,55 @@ def home(request):
 
 @login_required
 def habits_list(request):
-    habits = Habit.objects.all()
-    return render(request, 'habits/habits_list.html', {'habits': habits})
+    habit = Habit.objects.all()
+    return render(request, 'Habits/habits_list.html', {'habit': habit})
 
 
 @login_required
 def habit_detail(request, pk):
-    habits = Habit.objects.all()
-    habit = get_object_or_404(habits, pk=pk)
+    habit = get_object_or_404(Habit, pk=pk)
     return render(request, 'habits/habit_detail.html', {"habit": habit})
 
 
 @login_required
 def add_habit(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = HabitForm()
+    else:
         form = HabitForm(data=request.POST)
         if form.is_valid():
-            habit = form.save(commit=False)
-            habit.user = request.user
-            habit.save()
+            form.save()
             messages.success(request, "Your new habit has been added!")
-            return redirect(to='habits_list', pk=habit.pk)
-        else:
-            form = HabitForm()
+            return redirect(to='habits_list')
     return render(request, "habits/add_habit.html", {"form": form})
 
 
 @login_required
 def delete_habit(request, pk):
-    habits = get_object_or_404(Habit, pk=pk)
+    habit = get_object_or_404(Habit, pk=pk)
     if request.method == 'POST':
-        habits.delete()
+        habit.delete()
         return redirect(to='habits_list')
-    return render(request, "habits/delete_habit.html", {"habits": habits})
+    return render(request, "habits/delete_habit.html", {"habit": habit})
 
 
 @login_required
 def edit_habit(request, pk):
-    habits = get_object_or_404(Habit, pk=pk)
+    habit = get_object_or_404(Habit, pk=pk)
     if request.method == "GET":
-        forms = HabitForm(instance=habits)
+        form = HabitForm(instance=habit)
     else:
-        forms = HabitForm(data=request.POST, instance=habits)
-        if forms.is_valid():
-            forms.save()
-            return redirect(to="habit_detail")
+        form = HabitForm(data=request.POST, instance=habit)
+        if form.is_valid():
+            form.save()
+            return redirect(to="habits_list")
     return render(request, "habits/edit_habit.html", 
-        {"forms": forms, "habits": habits})
+        {"form": form, "habit": habit})
 
 
 @login_required
-def add_entry(request, habit_pk):
-    habit = get_object_or_404(request.user.habits, pk=habit_pk )
+def add_entry(request, pk):
+    habit = get_object_or_404(Habit, pk=pk )
     if request.method == "POST":
         form = HabitTrackerForm(data=request.POST)
         if form.is_valid():
@@ -75,7 +73,7 @@ def add_entry(request, habit_pk):
             return redirect(to='habit_detail', pk=habit.pk)
         else:
             form = HabitTrackerForm()
-        return render(request, "habits/add_entry.html", {"form": form})
+        return render(request, "habits/add_entry.html", {"form": form, "habit": habit})
 
 
 

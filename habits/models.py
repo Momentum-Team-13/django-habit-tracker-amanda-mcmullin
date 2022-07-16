@@ -36,5 +36,5 @@ class HabitTracker(BaseModel):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['habit', 'date'], name='unique_habittracker')
+            UniqueConstraint(fields=['habit', 'date'], name='unique_entry')
         ]

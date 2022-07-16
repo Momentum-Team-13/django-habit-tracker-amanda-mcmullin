@@ -14,19 +14,17 @@ from pathlib import Path
 import environ
 import django_on_heroku
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 # For django-environ
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
 
+# reading .env file
 environ.Env.read_env()
 
-
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -40,9 +38,7 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'registration', #should be immediately above 'django.contrib.admin'
     'django.contrib.admin',
@@ -55,7 +51,6 @@ INSTALLED_APPS = [
     "django_extensions",
     'habits',
 ]
-
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -88,18 +83,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     "default": env.db()
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -115,10 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'US/Eastern'
@@ -127,29 +116,29 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# this has to be set if you have created a custom user model
 AUTH_USER_MODEL = 'habits.User'
 
+# this is for django debug toolbar
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+# django-registration-redux
 ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "auth_login"
 
-
+# heroku settings
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
-
