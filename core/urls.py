@@ -26,10 +26,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('habits/', habits_views.habits_list, name='habits_list'),
     path('habits/add/', habits_views.add_habit, name='add_habit'),
-    path('habits/<int:pk>/edit/', habits_views.edit_habit, name='edit_habit'),
-    path('habits/<int:pk>/delete/', habits_views.delete_habit, name='delete_habit'),
-    path('habits/<int:pk>/entry/', habits_views.add_entry, name='add_entry'),
+    # path('habits/<int:pk>/edit/', habits_views.edit_habit, name='edit_habit'),
+    # path('habits/<int:pk>/delete/', habits_views.delete_habit, name='delete_habit'),
+    # path('habits/<int:pk>/entry/', habits_views.add_entry, name='add_entry'),
     path('habits/<int:pk>/detail/', habits_views.habit_detail, name='habit_detail'),
+    path('habits/<int:pk>/<int:year>/<int:month>/<int:day>', habits_views.update_create_tracker, name='update_create_tracker'),
 ]
 
 
