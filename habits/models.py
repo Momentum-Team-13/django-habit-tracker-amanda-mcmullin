@@ -4,7 +4,7 @@ from django.db.models.constraints import UniqueConstraint
 
 # Create your models here.
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -12,9 +12,6 @@ class BaseModel(models.Model):
 
 
 class User(AbstractUser):
-    user_name = models.CharField(max_length=150, null=True, blank=True)
-    email = models.CharField(max_length=150, null=True, blank=True)
-
     def __str__(self):
         return self.username
 
@@ -22,7 +19,7 @@ class User(AbstractUser):
 class Habit(BaseModel):
     creator = models.ForeignKey("User", on_delete=models.CASCADE, related_name="habits")
     habit_name = models.CharField(max_length=150)
-    goal = models.PositiveIntegerField(default=0)
+    goal = models.PositiveIntegerField()
     unit = models.CharField(max_length=55)
 
     def __str__(self):
@@ -30,11 +27,12 @@ class Habit(BaseModel):
 
 
 class HabitTracker(BaseModel):
-    habit = models.ForeignKey("Habit", on_delete=models.CASCADE, related_name="habit_trackers")
-    date = models.DateField(auto_now=True)
-    goal_quantity = models.PositiveIntegerField(default=0)
+    habit = models.ForeignKey("Habit", on_delete=models.CASCADE, related_name="habittrackers")
+    date = models.DateField(auto_now_add=True)
+    goal_quantity = models.PositiveIntegerField()
 
     class Meta:
+        verbose_name_plural = 'HabitTrackers'
         constraints = [
             UniqueConstraint(fields=['habit', 'date'], name='unique_entry')
         ]
