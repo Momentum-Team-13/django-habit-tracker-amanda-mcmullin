@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.constraints import UniqueConstraint
 
+
 # Create your models here.
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    created_at = models.DateTimeField(db_index=True,auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -28,8 +29,11 @@ class Habit(BaseModel):
 
 class HabitTracker(BaseModel):
     habit = models.ForeignKey("Habit", on_delete=models.CASCADE, related_name="habittrackers")
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True, blank=True, null=True)
     goal_quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.date
 
     class Meta:
         verbose_name_plural = 'HabitTrackers'

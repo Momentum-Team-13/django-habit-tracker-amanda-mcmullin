@@ -14,7 +14,7 @@ def home(request):
 
 @login_required
 def habits_list(request):
-    habit = Habit.objects.all()
+    habit = Habit.objects.filter(user=request.user.pk)
     return render(request, 'Habits/habits_list.html', {'habit': habit})
 
 
@@ -26,15 +26,26 @@ def habit_detail(request, pk):
 
 @login_required
 def add_habit(request):
-    if request.method == 'GET':
-        form = HabitForm()
-    else:
+    if request.method == "POST":
         form = HabitForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            habit = form.save(commit=False)
+            habit.author = request.user
+            habit.save()
             messages.success(request, "Your new habit has been added!")
-            return redirect(to='habits_list')
+            return redirect("habit_detail", pk=habit.pk)
+    else:
+        form = HabitForm()
     return render(request, "habits/add_habit.html", {"form": form})
+    # if request.method == 'GET':
+    #     form = HabitForm()
+    # else:
+    #     form = HabitForm(data=request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, "Your new habit has been added!")
+    #         return redirect(to='habits_list')
+    # return render(request, "habits/add_habit.html", {"form": form})
 
 
 @login_required
