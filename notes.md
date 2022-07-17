@@ -6,11 +6,11 @@ For this project, you will build a Django application that you can use to track 
 
 You'll need to set up a new Django project. You will need to follow the same steps you have been following to install `django` with `pipenv`. Consider installing some or all of the following packages:
 
-***UNABLE TO GET DJANGO-ENVIRON TO WORK PROPERLY***
-[] `django-environ` - for easily configuring a `.env` file
+
+[x]`django-environ` - for easily configuring a `.env` file
 [X]`django-debug-toolbar` - for debugging information in the browser
 [X]`django-extensions` - for extended functionality like `shell_plus`
-- `django-registration-redux` - for easily handling new user registration and authentication
+[X]`django-registration-redux` - for easily handling new user registration and authentication
 
 ## Postgres and Heroku
 
