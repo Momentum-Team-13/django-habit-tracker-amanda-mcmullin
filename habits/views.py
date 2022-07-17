@@ -15,13 +15,13 @@ def home(request):
 
 @login_required
 def habits_list(request):
-    habits = Habit.objects.filter(creator=request.creator.pk)
+    habits = Habit.objects.filter(creator=request.user.pk)
     date = {
         'year': datetime.date.today().year,
         'month': datetime.date.today().month,
         'day': datetime.date.today().day,
     }
-    return render(request, 'habits/habits_list.html', {'creator': request.creator, 'habits': habits, 'date': date})
+    return render(request, 'habits/habits_list.html', {'user': request.user, 'habits': habits, 'date': date})
 
 # @login_required
 # def habits_list(request):
@@ -35,10 +35,10 @@ def add_habit(request):
         form = HabitForm(data=request.POST)
         if form.is_valid():
             habit = form.save(commit=False)
-            habit.creator = request.creator
+            habit.user = request.user
             habit.save()
             messages.success(request, "Your new habit has been added!")
-            return redirect("habit_detail")
+            return redirect("habit_detail", pk=habit.pk)
     else:
         form = HabitForm()
     return render(request, "habits/add_habit.html", {"form": form})
@@ -46,7 +46,7 @@ def add_habit(request):
 
 @login_required
 def update_create_tracker (request, pk, year, month, day):
-    user_habit = Habit.objects.filter(user=request.creator.pk).get(pk=pk)
+    user_habit = Habit.objects.filter(user=request.user.pk).get(pk=pk)
     record_date = datetime.date(year, month, day)
 
     if request.method == "POST":
@@ -70,7 +70,7 @@ def update_create_tracker (request, pk, year, month, day):
 
 @login_required
 def habit_detail(request, pk):
-        user_habit = Habit.objects.filter(user=request.creator.pk).get(pk=pk)
+        user_habit = Habit.objects.filter(creator=request.user.pk).get(pk=pk)
         user_records = HabitTracker.objects.filter(habit=user_habit).order_by('-date')
         date = {
             'year': datetime.date.today().year,

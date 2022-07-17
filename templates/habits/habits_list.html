@@ -14,9 +14,7 @@
 </div>
 
 <p>
-    <a href="{% url 'add_habit'%}">Add Habit</a><br>
-    <a href="{% url 'edit_habit' pk=user.pk %}">Edit Habit</a><br>
-    <a href="{% url 'delete_habit' pk=user.pk %}">Delete Habit</a>
+    <a href="{% url 'add_habit' %}">Add Habit</a>
+    <a href="{% url 'habit_detail' %}">Habit Details</a>
 </p>
-
 {% endblock %}

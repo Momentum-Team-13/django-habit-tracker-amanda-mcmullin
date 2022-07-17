@@ -7,12 +7,10 @@
 <div>
     <h2>{{ habit.habit_name }}</h2>
     <div>Daily Goal: {{ habit.goal }} {{ habit.unit }}</div>
-
-    <p>
-        <a href="{% url 'habits_list' %}">View All Habits</a><br>
-        <a href="{% url 'edit_habit' %}">Edit Habit</a><br>
-        <a href="{% url 'delete_habit' %}">Delete Habit</a>
-    </p>
 </div>
+
+<p>
+    <a href="{% url 'habits_list' %}">Back to Habits List</a>
+</p>
 
 {% endblock %}
