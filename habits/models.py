@@ -32,8 +32,6 @@ class HabitTracker(BaseModel):
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     goal_quantity = models.PositiveIntegerField()
 
-    def __str__(self):
-        return self.date
 
     class Meta:
         verbose_name_plural = 'HabitTrackers'
